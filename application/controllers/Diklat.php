@@ -260,4 +260,32 @@ class Diklat extends CI_Controller
 		$this->form_validation->set_rules('jenis_diklat_id', 'Kategori', 'required');
 		$this->form_validation->set_rules('check_kesehatan', 'Pemeriksaan Kesehatan', 'required');
 	}
+
+	public function toggle_active_tahun()
+	{
+		// Set header untuk JSON response
+		header('Content-Type: application/json');
+		
+		$tahun_id = $this->input->post('tahun_id');
+		$diklat_id = $this->input->post('diklat_id');
+		$is_active = (int) $this->input->post('is_active');
+		
+		if (!$tahun_id || !$diklat_id) {
+			echo json_encode(['success' => false, 'message' => 'Parameter tidak lengkap']);
+			return;
+		}
+		
+		// Gunakan model untuk toggle status
+		$result = $this->DiklatTahun_model->toggle_active_status($tahun_id, $diklat_id, $is_active);
+		
+		if ($result) {
+			$status_text = $is_active ? 'diaktifkan' : 'dinonaktifkan';
+			echo json_encode([
+				'success' => true, 
+				'message' => "Status tahun berhasil $status_text"
+			]);
+		} else {
+			echo json_encode(['success' => false, 'message' => 'Gagal mengupdate status aktif']);
+		}
+	}
 }

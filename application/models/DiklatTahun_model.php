@@ -41,4 +41,32 @@ class DiklatTahun_model extends CI_Model
             'tahun' => $tahun
         ])->num_rows() > 0;
     }
+
+    // Toggle status aktif tahun diklat
+    public function toggle_active_status($tahun_id, $diklat_id, $is_active)
+    {
+        // Mulai transaction
+        $this->db->trans_start();
+        
+        try {
+            if ($is_active == 1) {
+                // Jika mengaktifkan, nonaktifkan semua tahun lain untuk diklat ini
+                $this->db->where('diklat_id', $diklat_id);
+                $this->db->where('id !=', $tahun_id);
+                $this->db->update('scre_diklat_tahun', ['is_active' => 0]);
+            }
+            
+            // Update status tahun yang dipilih
+            $this->db->where('id', $tahun_id);
+            $this->db->update('scre_diklat_tahun', ['is_active' => $is_active]);
+            
+            $this->db->trans_complete();
+            
+            return $this->db->trans_status() !== FALSE;
+            
+        } catch (Exception $e) {
+            $this->db->trans_rollback();
+            return false;
+        }
+    }
 }

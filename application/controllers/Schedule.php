@@ -6,8 +6,13 @@ class Schedule extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('Schedule_model', 'schedule_model');
+        $this->load->model('Schedule_model');
         $this->load->library('pagination');
+        $this->load->library('session');
+        $this->load->library('upload');
+        $this->load->helper('url');
+        $this->load->helper('form');
+        $this->load->database();
     }
 
     public function index()
@@ -21,16 +26,16 @@ class Schedule extends CI_Controller
         $limit = 200;
         $start = 0;
 
-        $jadwal = $this->schedule_model->get_by_diklat($diklat_id, $limit, $start);
+        $jadwal = $this->Schedule_model->get_by_diklat($diklat_id, $limit, $start);
 
         $data = [
             'jadwal' => $jadwal,
             'pagination' => '',
-            'diklat_nama' => $this->schedule_model->get_diklat_name($diklat_id),
-            'jenis_diklat' => $this->schedule_model->get_jenis_diklat($diklat_id),
+            'diklat_nama' => $this->Schedule_model->get_diklat_name($diklat_id),
+            'jenis_diklat' => $this->Schedule_model->get_jenis_diklat($diklat_id),
             'diklat_id' => $diklat_id,
             'back_id' => $diklat_id,
-            'list_tahun' => $this->schedule_model->get_all_tahun(),
+            'list_tahun' => $this->Schedule_model->get_all_tahun(),
             'start' => $start,
             'tahun_id' => null
         ];
@@ -47,12 +52,12 @@ class Schedule extends CI_Controller
         }
 
         // Ambil semua jadwal untuk kombinasi tahun + diklat
-        $jadwal = $this->schedule_model->get_by_diklat_tahun($diklat_id, $tahun_id, null, 1000, 0);
+        $jadwal = $this->Schedule_model->get_by_diklat_tahun($diklat_id, $tahun_id, null, 1000, 0);
 
         $data = [
             'jadwal' => $jadwal,
-            'diklat_nama' => $this->schedule_model->get_diklat_name($diklat_id),
-            'jenis_diklat' => $this->schedule_model->get_jenis_diklat($diklat_id),
+            'diklat_nama' => $this->Schedule_model->get_diklat_name($diklat_id),
+            'jenis_diklat' => $this->Schedule_model->get_jenis_diklat($diklat_id),
             'diklat_id' => $diklat_id,
             'tahun_id' => $tahun_id,
             'back_id' => $diklat_id,
@@ -73,8 +78,8 @@ class Schedule extends CI_Controller
         $data = [
             'diklat_id' => $diklat_id,
             'tahun_id' => $tahun_id,
-            'diklat_nama' => $this->schedule_model->get_diklat_name($diklat_id),
-            'jenis_diklat' => $this->schedule_model->get_jenis_diklat($diklat_id)
+            'diklat_nama' => $this->Schedule_model->get_diklat_name($diklat_id),
+            'jenis_diklat' => $this->Schedule_model->get_jenis_diklat($diklat_id)
         ];
 
         $this->load->view('schedule/upload_excel', $data);
@@ -286,5 +291,83 @@ class Schedule extends CI_Controller
         
         $writer->save('php://output');
         exit;
+    }
+
+    public function update_jadwal()
+    {
+        $this->load->library('session');
+        $this->load->helper('url');
+        
+        $jadwal_id = $this->input->post('jadwal_id');
+        $diklat_id = $this->input->post('diklat_id');
+        $tahun_id = $this->input->post('tahun_id');
+        
+        if (!$jadwal_id) {
+            $this->session->set_flashdata('error', 'ID jadwal tidak valid!');
+            redirect('Schedule');
+            return;
+        }
+
+        $data = array(
+            'periode' => $this->input->post('periode'),
+            'pelaksanaan_mulai' => $this->input->post('pelaksanaan_mulai') ?: null,
+            'pelaksanaan_akhir' => $this->input->post('pelaksanaan_akhir') ?: null,
+            'pendaftaran_mulai' => $this->input->post('pendaftaran_mulai') ?: null,
+            'pendaftaran_akhir' => $this->input->post('pendaftaran_akhir') ?: null,
+            'jumlah_kelas' => $this->input->post('jumlah_kelas'),
+            'kouta' => $this->input->post('kouta') ?: 0,
+            'kuota_per_kelas' => $this->input->post('kuota_per_kelas') ?: 0,
+            'sisa_kursi' => $this->input->post('sisa_kursi') ?: 0
+        );
+
+        $this->db->where('id', $jadwal_id);
+        
+        if ($this->db->update('scre_diklat_jadwal', $data)) {
+            $this->session->set_flashdata('success', 'Jadwal berhasil diperbarui!');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal memperbarui jadwal!');
+        }
+
+        // Redirect back to the schedule list
+        if ($diklat_id && $tahun_id) {
+            redirect("Schedule/show_by_tahun_diklat/$diklat_id/$tahun_id");
+        } else {
+            redirect('Schedule');
+        }
+    }
+
+    public function delete_jadwal($jadwal_id = null, $diklat_id = null, $tahun_id = null)
+    {
+        if (!$jadwal_id) {
+            $this->session->set_flashdata('error', 'ID jadwal tidak valid!');
+            redirect($_SERVER['HTTP_REFERER']);
+            return;
+        }
+
+        // Check if the record exists
+        $this->db->where('id', $jadwal_id);
+        $jadwal = $this->db->get('scre_diklat_jadwal')->row();
+        
+        if (!$jadwal) {
+            $this->session->set_flashdata('error', 'Jadwal tidak ditemukan!');
+            redirect($_SERVER['HTTP_REFERER']);
+            return;
+        }
+
+        // Delete the record
+        $this->db->where('id', $jadwal_id);
+        
+        if ($this->db->delete('scre_diklat_jadwal')) {
+            $this->session->set_flashdata('success', 'Jadwal berhasil dihapus!');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal menghapus jadwal!');
+        }
+
+        // Redirect back to the schedule list
+        if ($diklat_id && $tahun_id) {
+            redirect("Schedule/$diklat_id/$tahun_id");
+        } else {
+            redirect($_SERVER['HTTP_REFERER']);
+        }
     }
 }
