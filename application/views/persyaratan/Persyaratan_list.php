@@ -8,6 +8,7 @@
 
 	<!-- Bootstrap & Font Awesome -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css" rel="stylesheet">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
 	<style>
@@ -154,15 +155,17 @@
 									<td class="text-center"><?= $no++ ?></td>
 									<td><?= $p->persyaratan ?></td>
 									<td class="text-center">
-										<button type="button" class="btn btn-sm btn-outline-warning btn-edit" data-id="<?= $p->id ?>"
-											data-persyaratan="<?= htmlspecialchars($p->persyaratan) ?>" data-bs-toggle="modal"
-											data-bs-target="#modalEdit">
-											<i class="fa fa-pen-to-square"></i>
-										</button>
-										<a href="<?= site_url('persyaratan/hapus/' . $p->id) ?>" class="btn btn-sm btn-outline-danger"
-											onclick="return confirm('Yakin ingin menghapus?')">
-											<i class="fa fa-trash"></i>
-										</a>
+										<div class="d-flex justify-content-center gap-2">
+											<button type="button" class="btn btn-sm btn-outline-primary btn-edit" data-id="<?= $p->id ?>"
+												data-persyaratan="<?= htmlspecialchars($p->persyaratan) ?>" data-bs-toggle="modal"
+												data-bs-target="#modalEdit">
+												<i class="bi bi-pencil"></i>
+											</button>
+											<a href="<?= site_url('persyaratan/hapus/' . $p->id) ?>" class="btn btn-sm btn-outline-danger"
+												onclick="return confirm('Yakin ingin menghapus?')">
+												<i class="bi bi-trash"></i>
+											</a>
+										</div>
 									</td>
 								</tr>
 							<?php endforeach ?>
