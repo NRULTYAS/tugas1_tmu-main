@@ -3,26 +3,29 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>Portal Pendaftaran Diklat</title>
+	<title>Portal Pendaftaran Diklat - Admin</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css" rel="stylesheet">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 	<style>
-		.login-link {
-			color: #007bff;
-			font-weight: 500;
-			text-decoration: none;
-			padding: 8px 12px;
-			border-radius: 5px;
-			transition: all 0.2s ease-in-out;
+		.menu-card {
+			transition: all 0.2s ease;
+			border: 1px solid #dee2e6;
 		}
-
-		.sidebar .nav-link {
-			color: #000;
+		
+		.menu-card:hover {
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 		}
-
-		.sidebar .nav-link:hover,
-		.sidebar .nav-link:focus {
-			background-color: #e9ecef;
+		
+		.menu-icon {
+			font-size: 2rem;
+			margin-bottom: 1rem;
+		}
+		
+		.menu-title {
+			font-size: 1.1rem;
+			font-weight: 600;
+			margin-bottom: 0.5rem;
 		}
 	</style>
 </head>
@@ -68,52 +71,104 @@
 	</nav>
 
 	<!-- Layout -->
-	<div class="container-fluid">
+	<div class="container-fluid p-4">
 		<div class="row">
-			<!-- Sidebar -->
-			<div class="col-md-2 bg-light vh-100 p-3 sidebar">
-				<div class="list-group">
-
-					<!-- Beranda -->
-					<a href="<?= site_url('dashboard') ?>" class="list-group-item list-group-item-action active">
-						<i class="fa fa-home me-2"></i> Beranda
-					</a>
-
+			<div class="col-12">
+				<!-- Welcome Section -->
+				<div class="card mb-4">
+					<div class="card-body bg-primary text-white">
+						<h4>Selamat Datang, <?= $this->session->userdata('nama') ?? 'Admin' ?>!</h4>
+						<p class="mb-0">Dashboard Admin Pendaftaran Diklat</p>
+					</div>
 				</div>
 
-				<!-- Diklat sebagai menu utama -->
-				<div class="list-group mt-3">
-					<a href="<?= site_url('diklat') ?>" class="list-group-item list-group-item-action">
-						<i class="fa fa-book-open me-2"></i> Diklat
-					</a>
+				<!-- Menu -->
+				<div class="row mb-4">
+					<div class="col-md-3 mb-3">
+						<a href="<?= site_url('diklat') ?>" class="text-decoration-none">
+							<div class="card menu-card">
+								<div class="card-body text-center">
+									<i class="fa fa-book-open menu-icon text-primary"></i>
+									<div class="menu-title">Diklat</div>
+									<small class="text-muted">Kelola data diklat</small>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="col-md-3 mb-3">
+						<a href="<?= site_url('jenisdiklat') ?>" class="text-decoration-none">
+							<div class="card menu-card">
+								<div class="card-body text-center">
+									<i class="fa fa-layer-group menu-icon text-success"></i>
+									<div class="menu-title">Jenis Diklat</div>
+									<small class="text-muted">Kelola jenis diklat</small>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="col-md-3 mb-3">
+						<a href="<?= site_url('persyaratan') ?>" class="text-decoration-none">
+							<div class="card menu-card">
+								<div class="card-body text-center">
+									<i class="fa fa-list-check menu-icon text-warning"></i>
+									<div class="menu-title">Persyaratan</div>
+									<small class="text-muted">Kelola persyaratan</small>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="col-md-3 mb-3">
+						<a href="<?= site_url('pendaftaran') ?>" class="text-decoration-none">
+							<div class="card menu-card">
+								<div class="card-body text-center">
+									<i class="fa fa-users menu-icon text-info"></i>
+									<div class="menu-title">Pendaftaran</div>
+									<small class="text-muted">Kelola pendaftaran</small>
+								</div>
+							</div>
+						</a>
+					</div>
 				</div>
 
-				<!-- Submenu Master -->
-				<div class="list-group mt-3">
-					<a class="d-flex justify-content-between align-items-center text-decoration-none text-dark px-3 py-2"
-						data-bs-toggle="collapse" href="#submenuMaster" role="button" aria-expanded="false"
-						aria-controls="submenuMaster" id="toggleMasterMenu">
-						<div><i class="fa fa-book me-2"></i> Data Master</div>
-						<i class="fa fa-chevron-down" id="masterMenuIcon"></i>
-					</a>
-					<div class="collapse" id="submenuMaster">
-						<div class="list-group list-group-flush">
-							<a class="list-group-item list-group-item-action border-0 ps-5" href="<?= site_url('jenisdiklat') ?>">
-								<i class="fa fa-layer-group me-2"></i> Jenis Diklat
-							</a>
-							<a class="list-group-item list-group-item-action border-0 ps-5" href="<?= site_url('Persyaratan') ?>">
-								<i class="fa fa-list-check me-2"></i> Persyaratan
-							</a>
+				<!-- Statistik -->
+				<div class="row">
+					<div class="col-md-3 mb-3">
+						<div class="card">
+							<div class="card-body text-center">
+								<i class="fa fa-book-open text-primary mb-2" style="font-size: 2rem;"></i>
+								<h5><?= $total_diklat ?? '0' ?></h5>
+								<small class="text-muted">Total Diklat</small>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mb-3">
+						<div class="card">
+							<div class="card-body text-center">
+								<i class="fa fa-layer-group text-success mb-2" style="font-size: 2rem;"></i>
+								<h5><?= $total_jenis_diklat ?? '0' ?></h5>
+								<small class="text-muted">Jenis Diklat</small>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mb-3">
+						<div class="card">
+							<div class="card-body text-center">
+								<i class="fa fa-users text-info mb-2" style="font-size: 2rem;"></i>
+								<h5><?= $total_pendaftar ?? '0' ?></h5>
+								<small class="text-muted">Total Pendaftar</small>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mb-3">
+						<div class="card">
+							<div class="card-body text-center">
+								<i class="fa fa-calendar text-secondary mb-2" style="font-size: 2rem;"></i>
+								<h5>2025</h5>
+								<small class="text-muted">Tahun Aktif</small>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<!-- End Sidebar -->
-
-			<!-- Main Content -->
-			<div class="col-md-10 p-4">
-				<h2 class="mb-4">Selamat Datang di Portal Pendaftaran Diklat</h2>
-				<p class="mb-4">Silakan gunakan menu di sebelah kiri untuk mengelola data diklat.</p>
 			</div>
 		</div>
 	</div>
@@ -121,28 +176,17 @@
 	<!-- Bootstrap JS -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-	<!-- Konfirmasi Logout + Toggle Icon -->
+	<!-- Konfirmasi Logout -->
 	<script>
 		document.addEventListener("DOMContentLoaded", function () {
 			const logoutLink = document.getElementById("logout-link");
-			logoutLink.addEventListener("click", function (e) {
-				if (!confirm("Apakah Anda yakin ingin logout?")) {
-					e.preventDefault();
-				}
-			});
-
-			const submenu = document.getElementById("submenuMaster");
-			const icon = document.getElementById("masterMenuIcon");
-
-			submenu.addEventListener("show.bs.collapse", () => {
-				icon.classList.remove("fa-chevron-down");
-				icon.classList.add("fa-chevron-up");
-			});
-
-			submenu.addEventListener("hide.bs.collapse", () => {
-				icon.classList.remove("fa-chevron-up");
-				icon.classList.add("fa-chevron-down");
-			});
+			if (logoutLink) {
+				logoutLink.addEventListener("click", function (e) {
+					if (!confirm("Apakah Anda yakin ingin logout?")) {
+						e.preventDefault();
+					}
+				});
+			}
 		});
 	</script>
 

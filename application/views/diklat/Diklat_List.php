@@ -77,43 +77,15 @@
 
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-md-2 bg-light vh-100 p-3 sidebar">
-				<!-- Menu Beranda -->
-				<div class="list-group">
-					<a href="<?= site_url('dashboard') ?>" class="list-group-item list-group-item-action">
-						<i class="fa fa-home me-2"></i> Beranda
-					</a>
-				</div>
+			<div class="col-12 p-4">
+				<!-- Breadcrumb / Navigation -->
+				<nav aria-label="breadcrumb" class="mb-4">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="<?= site_url('dashboard') ?>"><i class="fa fa-home me-1"></i>Beranda</a></li>
+						<li class="breadcrumb-item active" aria-current="page">Diklat</li>
+					</ol>
+				</nav>
 
-				<!-- Menu Diklat (dipisahkan dari Data Master) -->
-				<div class="list-group mt-3">
-					<a href="<?= site_url('diklat') ?>" class="list-group-item list-group-item-action">
-						<i class="fa fa-book-open me-2"></i> Diklat
-					</a>
-				</div>
-
-				<!-- Menu Data Master -->
-				<div class="list-group mt-3">
-					<a class="d-flex justify-content-between align-items-center text-decoration-none text-dark px-3 py-2"
-						data-bs-toggle="collapse" href="#submenuMaster">
-						<div><i class="fa fa-book me-2"></i> Data Master</div>
-						<i class="fa fa-chevron-down"></i>
-					</a>
-					<div class="collapse" id="submenuMaster">
-						<div class="list-group list-group-flush">
-							<a class="list-group-item list-group-item-action border-0 ps-5" href="<?= site_url('jenisdiklat') ?>">
-								<i class="fa fa-layer-group me-2"></i> Jenis Diklat
-							</a>
-							<a class="list-group-item list-group-item-action border-0 ps-5" href="<?= site_url('Persyaratan') ?>">
-								<i class="fa fa-list-check me-2"></i> Persyaratan
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-
-
-			<div class="col-md-10 p-4">
 				<?php if ($this->session->flashdata('success')): ?>
 					<div class="alert alert-success alert-dismissible fade show" role="alert">
 						<?= $this->session->flashdata('success') ?>

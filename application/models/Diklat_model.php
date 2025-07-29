@@ -53,6 +53,24 @@ class Diklat_model extends CI_Model
     {
         return $this->db->where('id', $id)->update($this->table, ['is_exist' => 0]);
     }
+    
+    // Hitung total semua diklat
+    public function count_all_diklat()
+    {
+        return $this->db->where('is_exist', 1)->count_all_results($this->table);
+    }
+    
+    // Ambil semua diklat
+    public function get_all_diklat()
+    {
+        $this->db->select('d.*, j.jenis_diklat');
+        $this->db->from($this->table . ' d');
+        $this->db->join('scre_jenis_diklat j', 'j.id = d.jenis_diklat_id', 'left');
+        $this->db->where('d.is_exist', 1);
+        $this->db->order_by('d.id', 'DESC');
+        return $this->db->get()->result();
+    }
+    
     public function get_all()
     {
         return $this->db->get_where($this->table, ['is_exist' => 1])->result();
@@ -108,5 +126,28 @@ class Diklat_model extends CI_Model
     public function delete_tahun($tahun_id)
     {
         return $this->db->where('id', $tahun_id)->update($this->tahun_table, ['is_exist' => 0]);
+    }
+
+    // Get jadwal diklat berdasarkan diklat_id
+    public function get_jadwal_by_diklat($diklat_id)
+    {
+        $this->db->select('j.*, dt.tahun');
+        $this->db->from('scre_diklat_jadwal j');
+        $this->db->join('scre_diklat_tahun dt', 'dt.id = j.diklat_tahun_id', 'left');
+        $this->db->where('j.diklat_id', $diklat_id);
+        $this->db->where('j.is_exist', 1);
+        $this->db->where('j.is_daftar', 1); // hanya jadwal yang bisa didaftar
+        $this->db->order_by('j.pelaksanaan_mulai', 'ASC');
+        return $this->db->get()->result();
+    }
+
+    // Get persyaratan diklat berdasarkan diklat_id
+    public function get_persyaratan_by_diklat($diklat_id)
+    {
+        $this->db->select('p.persyaratan');
+        $this->db->from('scre_diklat_persyaratan dp');
+        $this->db->join('scre_persyaratan p', 'p.id = dp.persyaratan_id');
+        $this->db->where('dp.diklat_id', $diklat_id);
+        return $this->db->get()->result();
     }
 }

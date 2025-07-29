@@ -70,46 +70,16 @@
 	<!-- Layout -->
 	<div class="container-fluid">
 		<div class="row">
-			<!-- Sidebar -->
-			<div class="col-md-2 bg-light vh-100 p-3 sidebar">
-
-				<!-- Menu Beranda -->
-				<div class="list-group">
-					<a href="<?= site_url('dashboard') ?>" class="list-group-item list-group-item-action">
-						<i class="fa fa-home me-2"></i> Beranda
-					</a>
-				</div>
-
-				<!-- Menu Diklat (dipisah dari submenu) -->
-				<div class="list-group mt-3">
-					<a href="<?= site_url('diklat') ?>" class="list-group-item list-group-item-action">
-						<i class="fa fa-book-open me-2"></i> Diklat
-					</a>
-				</div>
-
-				<!-- Menu Data Master -->
-				<div class="list-group mt-3">
-					<a class="d-flex justify-content-between text-decoration-none text-dark px-3 py-2" data-bs-toggle="collapse"
-						href="#submenuMaster" role="button" aria-expanded="false" aria-controls="submenuMaster">
-						<div><i class="fa fa-book me-2"></i> Data Master</div>
-						<i class="fa fa-chevron-down"></i>
-					</a>
-					<div class="collapse" id="submenuMaster">
-						<div class="list-group list-group-flush">
-							<a class="list-group-item list-group-item-action border-0 ps-5" href="<?= site_url('jenisdiklat') ?>">
-								<i class="fa fa-layer-group me-2"></i> Jenis Diklat
-							</a>
-							<a class="list-group-item list-group-item-action border-0 ps-5" href="<?= site_url('persyaratan') ?>">
-								<i class="fa fa-list-check me-2"></i> Persyaratan
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-
-
 			<!-- Main Content -->
-			<div class="col-md-10 p-4">
+			<div class="col-12 p-4">
+				<!-- Breadcrumb / Navigation -->
+				<nav aria-label="breadcrumb" class="mb-4">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="<?= site_url('dashboard') ?>"><i class="fa fa-home me-1"></i>Beranda</a></li>
+						<li class="breadcrumb-item active" aria-current="page">Jenis Diklat</li>
+					</ol>
+				</nav>
+
 				<div class="d-flex justify-content-between mb-3">
 					<h4 class="fw-bold">Daftar Jenis Diklat</h4>
 					<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalJenisDiklat" id="btnTambah">

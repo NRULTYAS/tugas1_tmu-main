@@ -52,7 +52,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 // Default controller saat pertama kali diakses
-$route['default_controller'] = 'login'; // Tampilkan form login
+$route['default_controller'] = 'home'; // Tampilkan halaman depan
 
 // Autentikasi
 $route['login']     = 'login/index';     // Form login
@@ -74,6 +74,10 @@ $route['Schedule/(:any)'] = 'Schedule/show_by_diklat/$1';
 // Routing untuk detail berdasarkan tahun + diklat (2 segmen unik)
 $route['Schedule/(:any)/(:any)'] = 'Schedule/show_by_tahun_diklat/$1/$2';
 
+
+//Halaman frontend
+$route['home/detail_jenis/(:any)'] = 'home/detail_jenis/$1';
+$route['home/detail_program/(:any)'] = 'home/detail_program/$1';
 
 // Error handling
 $route['404_override'] = '';
